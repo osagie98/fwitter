@@ -1,2 +1,8 @@
 #Environment variables
 /env*
+
+#Weird app stuff
+fwitter.egg-info*
+
+#VSCode stuff
+.vscode/*
