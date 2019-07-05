@@ -6,4 +6,5 @@ app = Flask(__name__)
 
 app.config.from_object('fwitter.config')
 
-import fwitter.views
+import fwitter.api.index
+import fwitter.api.account
