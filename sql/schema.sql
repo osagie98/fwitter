@@ -1,6 +1,6 @@
 CREATE TABLE users(
   fullname VARCHAR(50) NOT NULL,
-  username VARCHAR(10) NOT NULL,
+  username VARCHAR(15) NOT NULL,
   email VARCHAR(20),
   password VARCHAR(256) NOT NULL,
   filename VARCHAR(64) NOT NULL,
