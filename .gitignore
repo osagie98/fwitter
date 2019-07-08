@@ -6,6 +6,7 @@ fwitter.egg-info*
 
 #VSCode stuff
 .vscode/*
+*.DS_Store
 
 # Node stuff
 *node_modules/
