@@ -13,8 +13,3 @@ class TestScripts():
         """Ensure ./bin/init can run"""
 
         assert os.path.isfile("bin/init")
-
-    def test_delete_exists(self):
-        """Ensure ./bin/delete can run"""
-
-        assert os.path.isfile("bin/delete")

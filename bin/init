@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+usage() {
+  echo "Use one of [reset, begin, erase]"
+}
+
+case $1 in
+  "reset")
+    rm -rf var/fwitter.sqlite3 var/uploads
+      mkdir var/uploads
+      sqlite3 var/fwitter.sqlite3 < sql/schema.sql
+      sqlite3 var/fwitter.sqlite3 < sql/demo.sql
+      ;;
+   "begin")
+     if [ -f var/fwitter.sqlite3 ]; then
+       echo "Can't begin, database already exists"
+     else
+       mkdir var/uploads
+       sqlite3 var/fwitter.sqlite3 < sql/schema.sql
+       sqlite3 var/fwitter.sqlite3 < sql/demo.sql
+     fi
+     ;;
+  "erase")
+    rm -rf var/fwitter.sqlite3 var/uploads
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
