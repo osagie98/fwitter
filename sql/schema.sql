@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tweets;
+
 CREATE TABLE users(
   fullname VARCHAR(50) NOT NULL,
   username VARCHAR(15) NOT NULL,

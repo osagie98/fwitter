@@ -1,8 +1,10 @@
 import os
 
+SECRET_KEY = 'dev'
+
 DATABASE_FILENAME = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-    'var', 'insta485.sqlite3'
+    'var', 'fwitter.sqlite3'
 )
 
 # File Upload to var/uploads/
