@@ -20,7 +20,7 @@ class TestScripts():
         # Start by removing any possible database
         os.system("rm -rf var/fwitter.sqlite3")
 
-        os.system("./bin/init begin")
+        os.system("./bin/init demo")
 
         assert os.path.isfile("var/fwitter.sqlite3")
         os.system("rm -rf var/fwitter.sqlite3")

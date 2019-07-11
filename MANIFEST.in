@@ -1,0 +1,4 @@
+include sql/schema.sql
+graft fwitter/static
+graft fwitter/templates
+global-exclude *.pyc

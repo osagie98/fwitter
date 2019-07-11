@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import pytest
-
+'''
 from fwitter import fwitter
 
 @pytest.fixture
@@ -15,6 +15,6 @@ def client():
         fwitter.init_db()
 
     yield client
-
     os.close(db_fd)
     os.unlink(fwitter.app.config['DATABASE'])
+'''
