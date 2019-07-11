@@ -24,10 +24,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    import fwitter.api.index
-    import fwitter.api.account
-
     from . import db
     db.init_app(app)
+
+    from .api import api
+    app.register_blueprint(api.bp)
 
     return app

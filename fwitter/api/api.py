@@ -4,5 +4,12 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
+from fwitter.db import get_db
 
-bp = Blueprint('api', __name__, url_prefix='/')
+
+bp = Blueprint('api', __name__, url_prefix='/api/v1')
+
+@bp.route('/create', methods=['GET'])
+def create():
+    print('test')
+    return 'Hello Blueprint!'

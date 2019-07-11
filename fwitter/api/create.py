@@ -5,9 +5,3 @@ from flask import (
 )
 
 
-from api import bp
-
-@bp.route('/create', methods=('GET'))
-def create():
-    print('test')
-    return 'Hello Blueprint!'
