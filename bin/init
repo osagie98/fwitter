@@ -3,27 +3,25 @@
 set -e
 
 usage() {
-  echo "Use one of [reset, begin, erase]"
+  echo "Use one of [reset, demo, erase]"
 }
 
 case $1 in
   "reset")
-    rm -rf var/fwitter.sqlite3 var/uploads
-      mkdir var/uploads
-      sqlite3 var/fwitter.sqlite3 < sql/schema.sql
-      sqlite3 var/fwitter.sqlite3 < sql/demo.sql
-      ;;
-   "begin")
-     if [ -f var/fwitter.sqlite3 ]; then
-       echo "Can't begin, database already exists"
-     else
-       mkdir var/uploads
-       sqlite3 var/fwitter.sqlite3 < sql/schema.sql
-       sqlite3 var/fwitter.sqlite3 < sql/demo.sql
-     fi
-     ;;
+    export FLASK_APP=fwitter
+    export FLASK_ENV=development
+    flask init-db
+    mkdir -p var/uploads
+    ;;
+  "demo")
+    export FLASK_APP=fwitter
+    export FLASK_ENV=development
+    flask init-db
+    mkdir -p var/uploads
+    sqlite3 var/fwitter.sqlite3 < sql/demo.sql
+    ;;
   "erase")
-    rm -rf var/fwitter.sqlite3 var/uploads
+    rm -rf var
     ;;
   *)
     usage
