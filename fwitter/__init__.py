@@ -27,7 +27,7 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    from .api import api
-    app.register_blueprint(api.bp)
+    from .api import api_bp
+    app.register_blueprint(api_bp)
 
     return app
