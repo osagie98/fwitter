@@ -7,6 +7,7 @@ CREATE TABLE users(
   email VARCHAR(20),
   password VARCHAR(256) NOT NULL,
   filename VARCHAR(64) NOT NULL,
+  totaltweets INTEGER DEFAULT 0,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(username)
 );
