@@ -43,5 +43,5 @@ class TestCreate():
             data = row.fetchall()
 
             # Make sure the data is not empty
-            assert data.size() == 1
+            assert len(data) == 1
 
