@@ -12,7 +12,21 @@ class TestCreate():
         client.post('/api/v1/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
         with app.app_context():
             cursor = get_db()
-            #row = cursor.execute('SELECT * FROM USERS')
-            #print(row.fetchall())
+            row = cursor.execute("SELECT * FROM users WHERE username = 'test_user'")
+            
+            data = row.fetchall()
 
-        assert False
+            # Make sure the data is not empty
+            assert data
+
+            # Make sure all but password was inserte as expected
+            assert data['username'] == 'test_user'
+            assert data['fullname'] == 'Foo Bar'
+            assert data['email'] == 'foozy@umich.edu'
+            assert not data['password'] == 'dontStoreInPlaintext'
+            assert data['filename'] == 'testfile.jpg'
+            assert data['totaltweets'] == 0
+            #TODO Find a way to test time created
+
+
+
