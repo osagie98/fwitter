@@ -7,7 +7,7 @@ Click==7.0
 coverage==4.5.3
 Flask==1.1.1
 fwitter==0.0.0
--e git+https://github.com/osagie98/fwitter.git@12d746a7db5a323de10ea55d857266e3fa0e2932#egg=fwittr
+-e git+https://github.com/osagie98/fwitter.git@a4b9fd0262d63d6556595232855c3377c5f5d31e#egg=fwittr
 idna==2.8
 importlib-metadata==0.18
 isort==4.3.21
@@ -31,6 +31,7 @@ six==1.12.0
 snowballstemmer==1.9.0
 typed-ast==1.4.0
 urllib3==1.25.3
+uuid==1.30
 wcwidth==0.1.7
 Werkzeug==0.15.4
 wrapt==1.11.2
