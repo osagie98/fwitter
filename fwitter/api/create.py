@@ -5,9 +5,9 @@ from flask import (
 )
 
 import flask
-
 from . import api_bp
 import fwitter
+import requests
 
 @api_bp.route('/create', methods=['GET', 'POST'])
 def create():
@@ -21,5 +21,11 @@ def create():
         return 'Hello Blueprint!'
     else:
 
+        request_data = request.get_json()
+        fullname = request_data['fullname']
+        username = request_data['username']
+        email = request_data['email']
+        password = request_data['password']
+        filename = request_data['filename']
         return 'This is a POST'
     
