@@ -20,12 +20,12 @@ class TestCreate():
             assert data
 
             # Make sure all but password was inserted as expected
-            assert data['username'] == 'test_user'
-            assert data['fullname'] == 'Foo Bar'
-            assert data['email'] == 'foozy@umich.edu'
-            assert not data['password'] == 'dontStoreInPlaintext'
-            assert data['filename'] == 'testfile.jpg'
-            assert data['totaltweets'] == 0
+            assert data[0]['username'] == 'test_user'
+            assert data[0]['fullname'] == 'Foo Bar'
+            assert data[0]['email'] == 'foozy@umich.edu'
+            assert not data[0]['password'] == 'dontStoreInPlaintext'
+            assert data[0]['filename'] == 'testfile.jpg'
+            assert data[0]['totaltweets'] == 0
             #TODO Find a way to test time created
             #TODO test encrypted password
 

@@ -10,38 +10,28 @@ import fwitter
 import requests
 from fwitter.util.encrypt import hash_password
 
-@api_bp.route('/create', methods=['GET', 'POST'])
+@api_bp.route('/create', methods=['POST'])
 def create():
+    """Add a new user to the database"""
 
-    if flask.request.method == 'GET':
-        db = fwitter.db.get_db()
-        cur = db.cursor()
-        cur.execute('select * from users')
-        test = cur.fetchall()
-        print(test[0]['username'])
+    request_data = flask.request.form
         
-        return 'Hello Blueprint!'
-    else:
+    fullname = request_data['fullname']
+    username = request_data['username']
+    email = request_data['email']
+    password = hash_password(request_data['password'])
+    filename = request_data['filename']
 
-        request_data = flask.request.form
+    db = fwitter.db.get_db()
+    cur = db.cursor()
         
-        fullname = request_data['fullname']
-        username = request_data['username']
-        email = request_data['email']
-        password = hash_password(request_data['password'])
-        filename = request_data['filename']
+    #TODO Fix returns
 
-        db = fwitter.db.get_db()
-        cur = db.cursor()
-        
-        #TODO Fix returns
+    # Because username is the primary key in users, the code throws an exception if a duplicate is added
+    try:
+        cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
+    except:
+        return {}, 300
 
-        # Because username is the primary key in users, the code throws an exception if a duplicate is added
-        try:
-            cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
-        except:
-            return {}, 300
-        db.commit()
-
-        return {}, 201
+    return {}, 201
     
