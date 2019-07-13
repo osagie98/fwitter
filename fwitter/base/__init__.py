@@ -6,5 +6,7 @@ from flask import (
 
 from fwitter.db import get_db
 
+# Provide base routes for those not logged in
+base_bp = Blueprint('base', __name__, url_prefix='')
 
-api_bp = Blueprint('api', __name__, url_prefix='/api/v1')
+from . import create

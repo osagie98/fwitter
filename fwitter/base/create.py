@@ -5,12 +5,12 @@ from flask import (
 )
 
 import flask
-from . import api_bp
+from . import base_bp
 import fwitter
 import requests
 from fwitter.util.encrypt import hash_password
 
-@api_bp.route('/create', methods=['POST'])
+@base_bp.route('/account/create', methods=['POST'])
 def create():
     """Add a new user to the database"""
 
@@ -36,7 +36,7 @@ def create():
     return {}, 201
 
 #Only temporary
-@api_bp.route('/')
+@base_bp.route('/')
 def index():
     return flask.render_template("index.html")
     

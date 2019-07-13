@@ -37,3 +37,22 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+
+class Cookie(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username, password):
+        return self._client.post(
+            '/api/v1/login',
+            data={'username': username, 'password': password}
+        )
+
+    def logout(self):
+        return self._client.get('/api/v1/logout')
+
+
+@pytest.fixture
+def cookie(client):
+    return Cookie(client)
+    

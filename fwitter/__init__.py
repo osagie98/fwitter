@@ -30,4 +30,7 @@ def create_app(test_config=None):
     from .api import api_bp
     app.register_blueprint(api_bp)
 
+    from .base import base_bp
+    app.register_blueprint(base_bp)
+
     return app
