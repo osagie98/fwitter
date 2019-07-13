@@ -10,13 +10,9 @@ class TestCreate():
         """Testing adding a new user with no data"""
 
         client.post('/api/v1/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
+        with app.app_context():
+            cursor = get_db()
+            #row = cursor.execute('SELECT * FROM USERS')
+            #print(row.fetchall())
 
-        cursor = get_db().cursor()
-        test = 'test'
-        
-        with pytest.raises(RuntimeError) as e:
-            row = cursor.execute(f'SELECT * FROM USERS WHERE USERNAME = {test}')
-            print(e)
-
-        print(row)
         assert False
