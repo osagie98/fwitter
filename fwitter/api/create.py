@@ -31,7 +31,12 @@ def create():
     try:
         cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
     except:
-        return {}, 300
+        return {}, 403
 
     return {}, 201
+
+#Only temporary
+@api_bp.route('/')
+def index():
+    return flask.render_template("index.html")
     

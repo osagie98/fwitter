@@ -3,7 +3,7 @@
 set -e
 # Set up database
 if [ ! -f var/fwitter.sqlite3 ]; then
-  ./bin/init begin
+  ./bin/init reset
 fi
 
 export FLASK_APP=fwitter
