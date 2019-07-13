@@ -27,7 +27,7 @@ def create():
             
     #TODO Fix returns
 
-    # Because username is the primary key in users, the code throws an exception if a duplicate is added
+    # Username is the primary key in users, so the code throws an exception if a duplicate is added
     try:
         cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
     except:

@@ -7,7 +7,7 @@ from flask import session
 class TestSession():
     """Testing logging in and out"""
 
-    def test_login_and_out(self, app, client):
+    def test_login(self, app, client):
         """Testing that a user has access to the correct locations when logging"""
 
         test_username = 'osagie_01'
