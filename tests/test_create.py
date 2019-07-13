@@ -19,7 +19,7 @@ class TestCreate():
             # Make sure the data is not empty
             assert data
 
-            # Make sure all but password was inserte as expected
+            # Make sure all but password was inserted as expected
             assert data['username'] == 'test_user'
             assert data['fullname'] == 'Foo Bar'
             assert data['email'] == 'foozy@umich.edu'
@@ -27,6 +27,21 @@ class TestCreate():
             assert data['filename'] == 'testfile.jpg'
             assert data['totaltweets'] == 0
             #TODO Find a way to test time created
+            #TODO test encrypted password
 
 
+    def test_add_duplicate(self, app, client):
+        """Testing to ensure two users with the same username cannot both exist"""
+
+        client.post('/api/v1/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
+        client.post('/api/v1/create', data={'username': 'test_user', 'fullname': 'Pro Gram', 'email': 'grammy@umich.edu', 'password': 'pleaseStoreInPlaintext', 'filename': 'testfile2.jpg'})
+       
+        with app.app_context():
+            cursor = get_db()
+            row = cursor.execute("SELECT * FROM users WHERE username = 'test_user'")
+            
+            data = row.fetchall()
+
+            # Make sure the data is not empty
+            assert data.size() == 1
 
