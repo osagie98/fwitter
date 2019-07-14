@@ -34,3 +34,35 @@ def create():
         return {}, 403
 
     return {}, 201
+
+@api_bp.route('/login', methods=['POST'])
+def login():
+    """Log a user in to their account"""
+
+    request_data = flask.request.form
+
+    username = request_data['username']
+    password = hash_password(request_data['password'])
+
+    db = fwitter.db.get_db()
+    cur = db.cursor()
+
+    # Get data based on username and compare
+
+    try:
+        cur.execute("SELECT * FROM users WHERE username={}".format(username))
+    except:
+        # Username not found
+        flask.abort(404)
+    
+    data = cur.fetchall()
+
+    if data['password'] != password:
+        flask.abort(404)
+    else:
+        flask.session['username'] = username
+        flask.session['email'] = data['email']
+        flask.session['fullname'] = data['fullname']
+        return {}, 201
+
+@api_bp.route('/logout', methods=['POST'])
