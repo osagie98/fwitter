@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './app'
 
 ReactDOM.render(
-  <p>I'm ready for frontend!</p>,
+  <App />,
   document.getElementById('reactEntry'),
 );
