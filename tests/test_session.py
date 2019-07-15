@@ -7,15 +7,14 @@ from flask import session
 class TestSession():
     """Testing logging in and out"""
 
-    def test_login(self, app, client, cookie):
+    def test_login_and_out(self, app, client, cookie):
         """Testing that a user has access to the correct locations when logging"""
 
         test_username = 'osagie_01'
         test_password = 'thisIsATestPassword'
 
         # Assert a logged in user cannot log in again
-        response = cookie.login(test_username, test_password)
-        print(response)
+        cookie.login(test_username, test_password)
        
         with client:
            client.get('/')
@@ -25,3 +24,11 @@ class TestSession():
 
         # TODO add error if logged in user logs in again
         
+        cookie.logout()
+
+        with client:
+           client.get('/')
+           assert 'username' not in session
+           assert 'email' not in session
+           assert 'fullname' not in session
+

@@ -75,3 +75,5 @@ def logout():
     flask.session.pop('username', None)
     flask.session.pop('email', None)
     flask.session.pop('fullname', None)
+
+    return {}, 200
