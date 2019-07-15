@@ -1,12 +1,13 @@
 import os
 import fwitter
 from fwitter.db import get_db
+from fwitter.util.encrypt import hash_password
 import pytest
 
 class TestAccount():
     """Testing creating a new user"""
 
-    def test_add_user(self, app, client):
+    def test_add_user(self, app, client, cookie):
         """Testing adding a new user with no data"""
 
         client.post('/api/v1/account/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
@@ -24,10 +25,12 @@ class TestAccount():
             assert data[0]['fullname'] == 'Foo Bar'
             assert data[0]['email'] == 'foozy@umich.edu'
             assert not data[0]['password'] == 'dontStoreInPlaintext'
+            assert data[0]['password'] == hash_password('dontStoreInPlaintext')
             assert data[0]['filename'] == 'testfile.jpg'
             assert data[0]['totaltweets'] == 0
             #TODO Find a way to test time created
-            #TODO test encrypted password
+
+            cookie.logout()
 
 
     def test_add_duplicate(self, app, client):

@@ -33,6 +33,10 @@ def create():
     except:
         return {}, 403
 
+    flask.session['username'] = username
+    flask.session['email'] = email
+    flask.session['fullname'] = fullname
+    
     return {}, 201
 
 @api_bp.route('/login', methods=['POST'])
