@@ -50,19 +50,28 @@ def login():
     # Get data based on username and compare
 
     try:
-        cur.execute("SELECT * FROM users WHERE username={}".format(username))
+        cur.execute("SELECT * FROM users WHERE username='{}'".format(username))
     except:
         # Username not found
         flask.abort(404)
     
     data = cur.fetchall()
 
-    if data['password'] != password:
+    if data[0]['password'] != password:
         flask.abort(404)
     else:
         flask.session['username'] = username
-        flask.session['email'] = data['email']
-        flask.session['fullname'] = data['fullname']
+        flask.session['email'] = data[0]['email']
+        flask.session['fullname'] = data[0]['fullname']
         return {}, 201
 
-@api_bp.route('/logout', methods=['POST'])
+@api_bp.route('/logout', methods=['GET'])
+def logout():
+    """Log a user out of a session"""
+
+    if 'username' not in flask.session:
+        flask.abort(404)
+
+    flask.session.pop('username', None)
+    flask.session.pop('email', None)
+    flask.session.pop('fullname', None)

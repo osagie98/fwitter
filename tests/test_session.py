@@ -15,6 +15,7 @@ class TestSession():
 
         # Assert a logged in user cannot log in again
         response = cookie.login(test_username, test_password)
+        print(response)
        
         with client:
            client.get('/')
