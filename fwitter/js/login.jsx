@@ -1,6 +1,6 @@
 import React from 'react';
 
-class SplashPage extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -11,9 +11,9 @@ class SplashPage extends React.Component {
 
     render() {
         return(
-            <p>This place will ask you to login</p>
+        <p>This is the login page</p>
         );
     }
 }
 
-export default SplashPage;
+export default Login;
