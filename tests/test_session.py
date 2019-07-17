@@ -49,3 +49,5 @@ class TestSession():
 
          assert response.status_code == 200
 
+      cookie.logout()
+

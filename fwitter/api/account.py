@@ -81,3 +81,12 @@ def logout():
     flask.session.pop('fullname', None)
 
     return {}, 200
+
+@api_bp.route('/checkLogin', methods=['GET'])
+def checkLogin():
+    """Check if a user is already logged in"""
+
+    if 'username' not in flask.session:
+        flask.abort(404)
+
+    return {}, 200
