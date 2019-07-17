@@ -18,7 +18,7 @@ class TestTweets():
         body = 'The first tweet!'
        
         with client:
-           client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
+           client.post('/api/v1/tweet', data={'body': body})
 
            cur = get_db().cursor()
            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, test_password))
@@ -37,6 +37,8 @@ class TestTweets():
            data2 = cur.fetchall()
 
            assert data1[0]['tweetid'] != data2[0]['tweetid']
+        
+        cookie.logout()
 
     
     def test_get_tweet(self, app, client, cookie):
@@ -49,7 +51,27 @@ class TestTweets():
 
         with client:
             response = client.get('/api/v1/tweet?tweetid=1')
+            assert False
+        
+        cookie.logout()
 
+    
+    def test_retweet(self, app, client, cookie):
+        """Test that a user can retweet any tweet"""
+
+        test_username = 'osagie_01'
+        test_password = 'thisIsATestPassword'
+
+        cookie.login(test_username, test_password)
+
+        with client:
+           client.post('/api/v1/tweet', data={'body': 'I hope somone retweets this!'})
+
+        cookie.logout()
+
+        cookie.login('osagie01', test_password)
+
+        assert False
 
 
 
