@@ -23,7 +23,8 @@ class Login extends React.Component {
     }
     
     onSubmit(event) {
-        fetch('/api/v1/login', { method: 'POST', credentials: 'same-origin', headers: {username: this.state.username, password: this.state.password} })
+        fetch('/api/v1/login', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({username: this.state.username, password: this.state.password}) })
         .then((response) => {
           if (!response.ok) return <p>You're logged in on login!</p>;
           return response.json();

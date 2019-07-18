@@ -43,7 +43,7 @@ def create():
 def login():
     """Log a user in to their account"""
 
-    request_data = flask.request.form
+    request_data = flask.request.get_json()
 
     username = request_data['username']
     password = hash_password(request_data['password'])
@@ -60,6 +60,7 @@ def login():
         flask.abort(404)
     
     data = cur.fetchall()
+    print(data)
 
     if data[0]['password'] != password:
         flask.abort(404)

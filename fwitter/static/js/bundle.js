@@ -2041,7 +2041,8 @@ var Login = function (_React$Component) {
     }, {
         key: 'onSubmit',
         value: function onSubmit(event) {
-            fetch('/api/v1/login', { method: 'POST', credentials: 'same-origin', headers: { username: this.state.username, password: this.state.password } }).then(function (response) {
+            fetch('/api/v1/login', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: this.state.username, password: this.state.password }) }).then(function (response) {
                 if (!response.ok) return _react2.default.createElement(
                     'p',
                     null,
