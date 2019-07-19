@@ -9,6 +9,7 @@ from . import api_bp
 import fwitter
 import requests
 from fwitter.util.encrypt import hash_password
+import pdb
 
 @api_bp.route('/account/create', methods=['POST'])
 def create():
@@ -88,6 +89,6 @@ def checkLogin():
     """Check if a user is already logged in"""
 
     if 'username' not in flask.session:
-        flask.abort(404)
+        return {}, 300
 
     return {}, 200

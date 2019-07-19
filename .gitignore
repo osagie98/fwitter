@@ -28,3 +28,5 @@ build/
 *.egg-info/
 
 var/*
+
+fwitter/static/js/bundle.js
