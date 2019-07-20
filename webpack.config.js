@@ -2,22 +2,24 @@ const path = require('path');
 
 module.exports = {
   entry: './fwitter/js/fwitter.jsx',
+  mode: 'development',
   output: {
     path: path.join(__dirname, '/fwitter/static/js/'),
     filename: 'bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
-        // Test for js or jsx files
         test: /\.jsx?$/,
-        loader: 'babel-loader',
-        query: {
-          // Convert ES6 syntax to ES5 for browser compatibility
-          presets: ['env', 'react'],
-        },
-      },
-    ],
+        use:
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            }
+          }
+      }
+    ]
   },
   resolve: {
     extensions: ['.js', '.jsx'],
