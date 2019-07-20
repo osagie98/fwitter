@@ -40,5 +40,8 @@
   },
   "scripts": {
     "test": "jest"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/fwitter/static/js/setupTests.js"
   }
 }
