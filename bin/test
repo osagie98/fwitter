@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+# Set up database
+if [ ! -f var/fwitter.sqlite3 ]; then
+  ./bin/init reset
+fi
+
+export FLASK_APP=fwitter
+export FLASK_ENV=development
+export FLASK_DEBUG=True
+export FWITTER_SETTINGS=config.py
+
+flask run > /dev/null 2>&1 &  SERVER=$!
+
+npm test &  JEST=$!
+
+wait $SERVER
+wait $JEST

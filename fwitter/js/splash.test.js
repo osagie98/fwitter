@@ -12,5 +12,7 @@ describe('<SplashPage />', () => {
  describe('A new Splash page test', () => {
   it('can look for certain text', () => {
      const wrapper = shallow(<SplashPage />);
+
+     expect(wrapper.find('div.create-account')).to.have.lengthOf(1);
    });
 });

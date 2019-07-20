@@ -15,16 +15,17 @@ class SplashPage extends React.Component {
 
     componentDidMount() {
         //TODO make api call to check if user is logged in
-        fetch('/api/v1/checkLogin', { credentials: 'omit' })
+        fetch('http://localhost:5000/api/v1/checkLogin', { credentials: 'omit' })
         .then((response) => {
-          //if (!response.ok)
+          if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
+        .catch(error => console.log(error));
     }
 
     render() {
         return(
-            <Link to="/login">Please login</Link>
+            <div className="create-account" />
         );
     }
 }
