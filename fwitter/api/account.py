@@ -43,8 +43,8 @@ def create():
 @api_bp.route('/login', methods=['POST'])
 def login():
     """Log a user in to their account"""
-
-    request_data = flask.request.get_json()
+    
+    request_data = flask.request.form
 
     username = request_data['username']
     password = hash_password(request_data['password'])
@@ -58,25 +58,27 @@ def login():
         cur.execute("SELECT * FROM users WHERE username='{}'".format(username))
     except:
         # Username not found
-        flask.abort(404)
+        flask.abort(401)
     
     data = cur.fetchall()
-    print(data)
+    if not data:
+        # Username not found
+        flask.abort(401)
 
     if data[0]['password'] != password:
-        flask.abort(404)
+        flask.abort(401)
     else:
         flask.session['username'] = username
         flask.session['email'] = data[0]['email']
         flask.session['fullname'] = data[0]['fullname']
-        return {}, 201
+        return {}, 200
 
 @api_bp.route('/logout', methods=['GET'])
 def logout():
     """Log a user out of a session"""
 
     if 'username' not in flask.session:
-        flask.abort(404)
+        flask.abort(403)
 
     flask.session.pop('username', None)
     flask.session.pop('email', None)
@@ -89,6 +91,6 @@ def checkLogin():
     """Check if a user is already logged in"""
 
     if 'username' not in flask.session:
-        return {}, 300
+        flask.abort(401)
 
     return {}, 200

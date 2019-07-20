@@ -24,13 +24,32 @@ class TestSession():
 
       # TODO add error if logged in user logs in again
         
-      cookie.logout()
+      response = cookie.logout()
+
+      assert response.status_code == 200
+
+      # Test that a logged out user cannot logout aagin
+
+      response = cookie.logout()
+
+      assert response.status_code == 403
 
       with client:
          client.get('/')
          assert 'username' not in session
          assert 'email' not in session
          assert 'fullname' not in session
+
+      # Checking correct username but wrong password, and vice versa
+
+      response = cookie.login(test_username, 'wrongPassword')
+
+      assert response.status_code == 401
+
+      response = cookie.login('wrongUsername', test_password)
+
+      assert response.status_code == 401
+
 
    def test_check_login(self, app, client, cookie):
       """Testing api call to see if user is already logged in"""
@@ -41,7 +60,7 @@ class TestSession():
       with client:
          response = client.get('/api/v1/checkLogin')
 
-         assert response.status_code == 404
+         assert response.status_code == 401
 
          cookie.login(test_username, test_password)
 
