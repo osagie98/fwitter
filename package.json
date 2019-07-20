@@ -9,13 +9,11 @@
     "url": "https://github.com/osagie98/fwitter.git"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.0.1",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
+    "babel-loader": "==7.1.2",
+    "babel-preset-env": "==1.7.0",
+    "babel-preset-react": "==6.24.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^4.8.0",
@@ -25,7 +23,7 @@
     "eslint-plugin-react": "^7.4.0",
     "jest": "^24.8.0",
     "react-test-renderer": "^16.8.6",
-    "webpack": "^3.6.0"
+    "webpack": "==3.6.0"
   },
   "dependencies": {
     "babel-jest": "^24.8.0",
