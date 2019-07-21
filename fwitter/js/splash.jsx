@@ -16,7 +16,7 @@ class SplashPage extends React.Component {
 
     componentDidMount() {
         //TODO make api call to check if user is logged in
-        fetch('http://localhost:5000/api/v1/checkLogin', { credentials: 'omit' })
+        fetch('/api/v1/checkLogin', { credentials: 'omit' })
         .then((response) => {
           if (!response.ok) 
           {
