@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 class SplashPage extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { redirectToProfile: true }
 
         this.onSubmit = this.onSubmit.bind(this)
     }
@@ -17,15 +18,30 @@ class SplashPage extends React.Component {
         //TODO make api call to check if user is logged in
         fetch('http://localhost:5000/api/v1/checkLogin', { credentials: 'omit' })
         .then((response) => {
-          if (!response.ok) throw Error(response.statusText);
-          return response.json();
+          if (!response.ok) 
+          {
+            if (response.status === 401) 
+            { // Unauthorized error, ask user to create an account or log in
+                this.setState({ redirectToProfile: false })
+            } else {
+                throw Error(response.status);
+            }
+          }
+          return response;
         })
         .catch(error => console.log(error));
     }
 
     render() {
         return(
-            <div className="create-account" />
+            <div className="login-or-redirect">
+                { this.state.redirectToProfile &&
+                    <p>test</p>
+                }
+                { !this.state.redirectToProfile && 
+                <div className="create-account" />
+                }
+            </div>
         );
     }
 }

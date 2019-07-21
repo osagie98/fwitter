@@ -14,6 +14,3 @@ export FWITTER_SETTINGS=config.py
 flask run > /dev/null 2>&1 &  SERVER=$!
 
 npm test &  JEST=$!
-
-wait $SERVER
-wait $JEST
