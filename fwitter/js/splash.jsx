@@ -22,8 +22,10 @@ class SplashPage extends React.Component {
           {
             if (response.status === 401) 
             { // Unauthorized error, ask user to create an account or log in
+                console.log('setting state')
                 this.setState({ redirectToProfile: false })
             } else {
+                console.log('uh oh')
                 throw Error(response.status);
             }
           }
@@ -39,7 +41,7 @@ class SplashPage extends React.Component {
                     <p>test</p>
                 }
                 { !this.state.redirectToProfile && 
-                <div className="create-account" />
+                <div className="create-account"></div>
                 }
             </div>
         );
