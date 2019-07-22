@@ -48,7 +48,7 @@ describe('Splash page when logged out', () => {
       json: () => Promise.resolve(mockResponse),
       status: 401
     }))
-    wrapper = mount(<SplashPage />);
+    wrapper = shallow(<SplashPage />);
   })
 
   it('should fetch from the api upon mounting', () => {
@@ -63,7 +63,8 @@ describe('Splash page when logged out', () => {
 
   it('renders the create-account div', () => {
     
-    expect(wrapper.find('div')).to.have.lengthOf(3);
+    let wrapper2 = shallow(<SplashPage />);
+    expect(wrapper2.find('.create-account')).to.have.length(1);
 
   });
 });
