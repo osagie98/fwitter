@@ -2,7 +2,10 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { shallow } from 'enzyme';
+// eslint-disable-next-line no-unused-vars
+import fetch from 'isomorphic-fetch';
 import SplashPage from './splash';
+
 
 describe('<SplashPage />', () => {
   it('can render a page without logging in', () => {
@@ -22,7 +25,7 @@ describe('Splash page when logged in', () => {
   });
 
   it('should fetch from the api upon mounting', () => {
-    // const wrapper = shallow(<SplashPage />);
+    shallow(<SplashPage />);
 
     expect(window.fetch).toHaveBeenCalled();
   });
@@ -57,7 +60,8 @@ describe('Splash page when logged out', () => {
   });
 
   it('renders the create-account div', () => {
-    const wrapper2 = shallow(<SplashPage />);
-    expect(wrapper2.find('.create-account')).to.have.length(1);
+    console.log(wrapper.debug())
+    console.log(wrapper.find('.create-account').length)
+    expect(wrapper.find('.create-account')).toHaveLength(1);
   });
 });
