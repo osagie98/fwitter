@@ -1,41 +1,51 @@
 import React from 'react';
-// import fetch from 'isomorphic-fetch';
-// import { Link, Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 class SplashPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { redirectToProfile: true };
+    this.state = { redirectToProfile: true, username: '' };
   }
 
   componentDidMount() {
-    // TODO make api call to check if user is logged in
     // eslint-disable-next-line no-undef
     fetch('/api/v1/checkLogin', { credentials: 'omit' })
       .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) { /* Unauthorized error,
-            ask user to create an account or log in */
-            this.setState({ redirectToProfile: false });
-          } else {
-            throw Error(response.status);
-          }
-        }
-        console.log('this should show up 6 times')
-        return response;
+        if (!response.ok) throw response.status;
+        return response.json();
       })
-      .catch(error => console.log(error));
+      .then((data) => {
+        this.setState({
+          username: data.username,
+        });
+      })
+      .catch((error) => {
+        if (error === 401) {
+          this.setState({ redirectToProfile: false });
+        } else {
+          console.log(error);
+        }
+      });
   }
 
   render() {
     const { redirectToProfile } = this.state;
+    const { username } = this.state;
+    const profileUrl = `/users/${username}`;
     return (
       <div className="login-or-redirect">
         { redirectToProfile
-                && <p className="test">test</p>
+                && <Redirect to={profileUrl} />
                 }
         { !redirectToProfile
-                && <div className="create-account" />
+                && (
+                <div className="create-account-or-login">
+                  <Link id="create" to="/create">Create an account</Link>
+                  <br />
+                  <p>Have an account? </p>
+                  <Link id="login" to="/login">Login</Link>
+                </div>
+                )
                 }
       </div>
     );

@@ -12,7 +12,7 @@ const App = () => (
     <Route exact path="/" component={SplashPage} />
     <Route path="/login" component={Login} />
     <Route path="/create" component={CreateAccount} />
-    <Route path="/:user" component={Profile} />
+    <Route path="/users/:user" component={Profile} />
   </HashRouter>
 );
 
