@@ -1,3 +1,4 @@
+"""Testing api calls related to tweeting."""
 import os
 import fwitter
 from fwitter.db import get_db
@@ -5,16 +6,15 @@ import pytest
 from flask import session
 
 class TestTweets():
-    """Testing api calls related to tweeting"""
+    """Testing api calls related to tweeting."""
 
     def test_post_tweet(self, app, client, cookie):
-        """Testing that a user can correctly add to the tweet table"""
-
+        """Testing that a user can correctly add to the tweet table."""
         test_username = 'osagie_01'
         test_password = 'thisIsATestPassword'
 
         cookie.login(test_username, test_password)
-
+        # This is actually the second twee, test.sql already added one
         body = 'The first tweet!'
        
         with client:
@@ -27,7 +27,10 @@ class TestTweets():
 
            assert not data1[0]['retweet']
 
+           assert data1[0]['body'] == body
+
            # TODO find what tweetid should be and test for it
+           assert data1[0]['tweetid'] == 2
            # Test to ensure tweets with identical bodies and owners have separate tweetids
         
            client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
@@ -42,8 +45,7 @@ class TestTweets():
 
     
     def test_get_tweet(self, app, client, cookie):
-        """Test that a user can fetch a requested tweet"""
-
+        """Test that a user can fetch a requested tweet."""
         test_username = 'osagie_01'
         test_password = 'thisIsATestPassword'
 
@@ -57,8 +59,7 @@ class TestTweets():
 
     
     def test_retweet(self, app, client, cookie):
-        """Test that a user can retweet any tweet"""
-
+        """Test that a user can retweet any tweet."""
         test_username = 'osagie_01'
         test_password = 'thisIsATestPassword'
 

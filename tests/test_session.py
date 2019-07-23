@@ -1,3 +1,4 @@
+"""Testing logging in and out."""
 import os
 import fwitter
 from fwitter.db import get_db
@@ -5,11 +6,10 @@ import pytest
 from flask import session
 
 class TestSession():
-   """Testing logging in and out"""
-
+   """Testing logging in and out."""
+   
    def test_login_and_out(self, app, client, cookie):
-      """Testing that a user has access to the correct locations when logging"""
-
+      """Testing that a user has access to the correct locations when logging."""
       test_username = 'osagie_01'
       test_password = 'thisIsATestPassword'
 
@@ -52,19 +52,18 @@ class TestSession():
 
 
    def test_check_login(self, app, client, cookie):
-      """Testing api call to see if user is already logged in"""
-
+      """Testing api call to see if user is already logged in."""
       test_username = 'osagie_01'
       test_password = 'thisIsATestPassword'
 
       with client:
-         response = client.get('/api/v1/checkLogin')
+         response = client.get('/api/v1/check_login')
 
          assert response.status_code == 401
 
          cookie.login(test_username, test_password)
 
-         response = client.get('/api/v1/checkLogin')
+         response = client.get('/api/v1/check_login')
 
          assert response.status_code == 200
 

@@ -86,7 +86,7 @@ def logout():
 
     return {}, 200
 
-@api_bp.route('/checkLogin', methods=['GET'])
+@api_bp.route('/check_login', methods=['GET'])
 def checkLogin():
     """Check if a user is already logged in"""
 
