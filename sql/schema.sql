@@ -19,5 +19,6 @@ CREATE TABLE tweets(
   owner VARCHAR(15) NOT NULL,
   retweet BOOLEAN NOT NULL,
   PRIMARY KEY(tweetid),
+  original_owner VARCHAR(15) NOT NULL, /* The person who first tweeted this tweet */
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE
 );
