@@ -35,7 +35,7 @@ class TestTweets():
         
            client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
 
-           cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, test_password))
+           cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, 'The first tweet!'))
 
            data2 = cur.fetchall()
 
@@ -66,11 +66,22 @@ class TestTweets():
         cookie.login(test_username, test_password)
 
         with client:
-           client.post('/api/v1/tweet', data={'body': 'I hope somone retweets this!'})
+           client.post('/api/v1/tweet', data={'body': 'I hope somone retweets this!',
+           'retweet': False})
 
         cookie.logout()
 
         cookie.login('osagie01', test_password)
+
+        with client:
+            client.post('/api/v1/tweet', data={'id' : 1 })
+
+            cur = get_db().cursor()
+            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format('osagie01' 'The first tweet!'))
+
+            data = cur.fetchall()
+
+            assert data[0]['original_owner'] == 'osagie_01'
 
         assert False
 
