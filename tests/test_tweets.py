@@ -77,15 +77,31 @@ class TestTweets():
             client.post('/api/v1/tweet', data={'id' : 1 })
 
             cur = get_db().cursor()
-            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format('osagie01' 'The first tweet!'))
+            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format('osagie01', 'The first tweet!'))
 
             data = cur.fetchall()
 
             assert data[0]['original_owner'] == 'osagie_01'
 
-        assert False
+    def test_like_tweet(self, app, client, cookie):
+        """Test that a user can like a tweet."""
+        test_username = 'osagie01'
+        test_password = 'thisIsATestPassword'
 
+        cookie.login(test_username, test_password)
 
+        cur = get_db().cursor()
+        cur.execute("SELECT * FROM TWEETS WHERE id=1")
+        data1 = cur.fetchall()
 
+        id_check = data1[0]['id']
 
+        assert id_check == 0
 
+        with client:
+           client.post('/api/v1/like_tweet', data={'id': 1 })
+
+           cur.execute("SELECT * FROM TWEETS WHERE id=1")
+           data2 = cur.fetchall()
+
+           assert data2[0]['id'] == 1

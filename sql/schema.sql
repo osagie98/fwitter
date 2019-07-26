@@ -18,6 +18,7 @@ CREATE TABLE tweets(
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   owner VARCHAR(15) NOT NULL,
   retweet BOOLEAN NOT NULL,
+  likes INTEGER DEFAULT 0,
   PRIMARY KEY(tweetid),
   original_owner VARCHAR(15) NOT NULL, /* The person who first tweeted this tweet */
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE
