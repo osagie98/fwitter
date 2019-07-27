@@ -13,6 +13,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE tweets(
+  originalOwner VARCHAR(15) NOT NULL, /* The person who first tweeted this tweet */
   body VARCHAR(256) NOT NULL,
   tweetid VARCHAR(20) NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -20,6 +21,5 @@ CREATE TABLE tweets(
   retweet BOOLEAN NOT NULL,
   likes INTEGER DEFAULT 0,
   PRIMARY KEY(tweetid),
-  original_owner VARCHAR(15) NOT NULL, /* The person who first tweeted this tweet */
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE
 );
