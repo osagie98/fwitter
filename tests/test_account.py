@@ -49,3 +49,29 @@ class TestAccount():
             assert len(data) == 1
 
     # TODO write a test for deleting an account
+    def test_delete_account(self, app, client, cookie):
+        """Testing to ensure that accounts are effectively deleted"""
+
+        test_username = 'osagie01'
+        test_password = 'thisIsATestPassword'
+
+        # Assert that a logged out user cannot delete an account
+
+        with client:
+            response = client.delete('/api/v1/account')
+            assert response.status_code == 403
+
+        cookie.login(test_username, test_password)
+
+        with client:
+            # Normal test
+            response = client.delete('/api/v1/account')
+            assert response.status_code == 204
+            
+            cur = get_db().cursor()
+            cur.execute("SELECT * FROM users WHERE username=osagie01")
+            data1 = cur.fetchall()
+
+            assert len(data1) == 0
+        
+        # Not logging out here, that may cause issues

@@ -203,3 +203,9 @@ class TestTweets():
             # Normal test
             response = client.delete('/api/v1/tweet', data={'id': 1})
             assert response.status_code == 204
+
+            cur = get_db().cursor()
+            cur.execute("SELECT * FROM TWEETS WHERE id=1")
+            data1 = cur.fetchall()
+
+            assert len(data1) == 0
