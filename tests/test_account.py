@@ -10,7 +10,7 @@ class TestAccount():
     def test_add_user(self, app, client, cookie):
         """Testing adding a new user with no data"""
 
-        client.post('/api/v1/account/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
+        client.post('/api/v1/account', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
         with app.app_context():
             cursor = get_db()
             row = cursor.execute("SELECT * FROM users WHERE username = 'test_user'")
@@ -36,8 +36,8 @@ class TestAccount():
     def test_add_duplicate(self, app, client):
         """Testing to ensure two users with the same username cannot both exist"""
 
-        client.post('/api/v1/account/create', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
-        client.post('/api/v1/account/create', data={'username': 'test_user', 'fullname': 'Pro Gram', 'email': 'grammy@umich.edu', 'password': 'pleaseStoreInPlaintext', 'filename': 'testfile2.jpg'})
+        client.post('/api/v1/account', data={'username': 'test_user', 'fullname': 'Foo Bar', 'email': 'foozy@umich.edu', 'password': 'dontStoreInPlaintext', 'filename': 'testfile.jpg'})
+        client.post('/api/v1/account', data={'username': 'test_user', 'fullname': 'Pro Gram', 'email': 'grammy@umich.edu', 'password': 'pleaseStoreInPlaintext', 'filename': 'testfile2.jpg'})
        
         with app.app_context():
             cursor = get_db()

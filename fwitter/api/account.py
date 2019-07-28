@@ -11,34 +11,39 @@ import requests
 from fwitter.util.encrypt import hash_password
 import pdb
 
-@api_bp.route('/account/create', methods=['POST'])
+@api_bp.route('/account', methods=['POST', 'DELETE'])
 def create():
     """Add a new user to the database"""
 
-    request_data = flask.request.form
-            
-    fullname = request_data['fullname']
-    username = request_data['username']
-    email = request_data['email']
-    password = hash_password(request_data['password'])
-    filename = request_data['filename']
+    if(flask.request.method == 'POST'):
+        request_data = flask.request.form
+                
+        fullname = request_data['fullname']
+        username = request_data['username']
+        email = request_data['email']
+        password = hash_password(request_data['password'])
+        filename = request_data['filename']
 
-    db = fwitter.db.get_db()
-    cur = db.cursor()
-            
-    #TODO Fix returns
+        db = fwitter.db.get_db()
+        cur = db.cursor()
+                
+        #TODO Fix returns
 
-    # Username is the primary key in users, so the code throws an exception if a duplicate is added
-    try:
-        cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
-    except:
+        # Username is the primary key in users, so the code throws an exception if a duplicate is added
+        try:
+            cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
+        except:
+            return {}, 403
+
+        flask.session['username'] = username
+        flask.session['email'] = email
+        flask.session['fullname'] = fullname
+        
+        return {}, 201
+    elif(flask.request.method == 'DELETE'):
+        return {}, 404
+    else:
         return {}, 403
-
-    flask.session['username'] = username
-    flask.session['email'] = email
-    flask.session['fullname'] = fullname
-    
-    return {}, 201
 
 @api_bp.route('/login', methods=['POST'])
 def login():

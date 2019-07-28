@@ -146,7 +146,7 @@ class TestTweets():
             assert response.status_code == 403
 
             # Check that post fails with multiple fields
-            response = client.patch('/api/v1/ttweet', data={'id': 1, 'body': 'This should fail' })
+            response = client.patch('/api/v1/tweet', data={'id': 1, 'body': 'This should fail' })
             assert response.status_code == 404
 
             # Test normal like
