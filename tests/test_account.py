@@ -48,3 +48,4 @@ class TestAccount():
             # Make sure the data is not empty
             assert len(data) == 1
 
+    # TODO write a test for deleting an account

@@ -157,7 +157,7 @@ class TestTweets():
             data2 = cur.fetchall()
 
             assert data2[0]['likes'] == 1
-            # TODO find out how to store likes
+
             cur.execute("SELECT * FROM likes WHERE tweetid=1 and owner=")
             data2 = cur.fetchall()
 
@@ -169,3 +169,37 @@ class TestTweets():
     
     def test_delete_tweet(self, app, client, cookie):
         """Test that a user can delete their own tweet"""
+        test_username = 'osagie01'
+        test_password = 'thisIsATestPassword'
+
+        # Test that a logged out user cannot delete a tweet
+        with client:
+            response = client.delete('/api/v1/tweet', data={'id': 1})
+            assert response.status_code == 403
+
+        # Test that a logged in user cannot delete a tweet that isn't theirs
+        cookie.login('osagie_01', test_password)
+        
+        with client:
+            response = client.delete('/api/v1/tweet', data={'id': 1})
+            assert response.status_code == 403
+        
+        cookie.logout()
+
+        cookie.login(test_username, test_password)
+
+        with client:
+            # Test that a tweet cannot be deleted with an invalid request
+            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
+            assert response.status_code == 403
+
+            response = client.delete('/api/v1/tweet')
+            assert response.status_code == 403
+
+            # Test that a non existent tweet can't be deleted
+            response = client.delete('/api/v1/tweet', data={'id': 100000})
+            assert response.status_code == 404
+
+            # Normal test
+            response = client.delete('/api/v1/tweet', data={'id': 1})
+            assert response.status_code == 204
