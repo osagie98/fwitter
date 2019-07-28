@@ -3,6 +3,7 @@ import fwitter
 from fwitter.db import get_db
 from fwitter.util.encrypt import hash_password
 import pytest
+import sqlite3
 
 class TestAccount():
     """Testing creating a new user"""
@@ -69,9 +70,15 @@ class TestAccount():
             assert response.status_code == 204
             
             cur = get_db().cursor()
-            cur.execute("SELECT * FROM users WHERE username=osagie01")
-            data1 = cur.fetchall()
+            # Test that an error ocurrs when searching for the deleted account
+            with pytest.raises(sqlite3.OperationalError) as e:
+                cur.execute("SELECT * FROM users WHERE username=osagie01")
 
-            assert len(data1) == 0
+            assert 'no such column' in str(e.value)
+
+            with pytest.raises(sqlite3.OperationalError) as e:
+                cur.execute("SELECT * FROM tweets WHERE owner=osagie01")
+
+            assert 'no such column' in str(e.value)
         
         # Not logging out here, that may cause issues

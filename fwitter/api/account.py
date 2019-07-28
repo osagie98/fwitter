@@ -26,12 +26,11 @@ def create():
 
         db = fwitter.db.get_db()
         cur = db.cursor()
-                
-        #TODO Fix returns
 
         # Username is the primary key in users, so the code throws an exception if a duplicate is added
         try:
-            cur.execute("INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')".format(fullname, username, email, password, filename))
+            cur.execute('''INSERT INTO users(fullname, username, email, password, filename) VALUES ('{}', '{}', '{}', '{}', '{}')'''
+                        .format(fullname, username, email, password, filename))
         except:
             return {}, 403
 
@@ -41,7 +40,20 @@ def create():
         
         return {}, 201
     elif(flask.request.method == 'DELETE'):
-        return {}, 404
+
+        if 'username' not in flask.session:
+            return {}, 403
+        
+        username = flask.session['username']
+        
+        db = fwitter.db.get_db()
+        cur = db.cursor()
+
+        cur.execute('DELETE FROM users WHERE username="{}"'.format(username))
+
+        flask.session.pop('username', None)
+
+        return {}, 204
     else:
         return {}, 403
 
