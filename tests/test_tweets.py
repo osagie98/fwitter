@@ -4,6 +4,7 @@ import fwitter
 from fwitter.db import get_db
 import pytest
 from flask import session
+import pdb
 
 class TestTweets():
     """Testing api calls related to tweeting."""
@@ -28,28 +29,26 @@ class TestTweets():
             assert response.status_code == 403
 
             response = client.post('/api/v1/tweet', data={'body': body})
+            client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
             assert response.status_code == 201
 
-            cur = get_db().cursor()
-            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, test_password))
+            cursor = get_db()
+            cur = cursor.execute("SELECT * FROM tweets WHERE owner='{}' AND body='{}'".format(test_username, body))
 
             data1 = cur.fetchall()
 
-            assert not data1[0]['retweet']
-
             assert data1[0]['body'] == body
 
-            assert data1[0]['tweetid'] == 2
+            assert data1[0]['tweetid'] == '2'
             # Test to ensure tweets with identical bodies and owners have separate tweetids
         
-            client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
 
-            cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, 'The first tweet!'))
+            cur = cursor.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format(test_username, 'The first tweet!'))
 
             data2 = cur.fetchall()
 
-            assert data1[0]['tweetid'] != data2[0]['tweetid']
-            assert data2[0]['tweetid'] == 3
+            assert data1[0]['tweetid'] != data2[1]['tweetid']
+            assert data2[1]['tweetid'] == '3'
         
         cookie.logout()
 

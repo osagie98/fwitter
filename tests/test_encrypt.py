@@ -16,7 +16,7 @@ class TestEncrypt():
 
 
     def test_compare_password(self):
-        """Testing comparing hashed passwords for loggin in"""
+        """Testing comparing hashed passwords for logging in"""
 
         test_password = 'testing'
         test_password_2 = 'ijustlovetestcases'
