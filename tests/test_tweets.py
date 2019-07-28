@@ -67,9 +67,8 @@ class TestTweets():
 
             response = client.get('/api/v1/tweet?tweetid=1')
             test_json = response.get_json()
-            print(test_json)
 
-            assert test_json['tweetid'] == 1
+            assert test_json['tweetid'] == '1'
             assert test_json['owner'] == 'osagie01'
             assert test_json['body'] == 'Hopefully this passes pytest'
         

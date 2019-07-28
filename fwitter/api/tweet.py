@@ -15,22 +15,45 @@ import pdb
 def tweet():
     """Get a tweet from the database, or post a new one"""
     if 'username' not in flask.session:
-        return {}, 403
+        if flask.request.method != 'GET':
+            flask.abort(403)
 
     request_data = flask.request.form
+    db = fwitter.db.get_db()
+    cur = db.cursor()
+    context = {}
 
     if flask.request.method == 'GET':
-        return {}, 404
+        if len(flask.request.args) == 0:
+            flask.abort(403)
+        
+        args = flask.request.args.to_dict()
+
+        if 'tweetid' not in args:
+            flask.abort(404)
+
+        cur.execute('SELECT * FROM tweets WHERE tweetid="{}"'.format(args['tweetid']))
+        tweet = cur.fetchone()
+        
+        # Tweet not found
+        if tweet == None:
+            flask.abort(404)
+        
+        context['originalOwner'] = tweet[0] 
+        context['body'] = tweet[1] 
+        context['tweetid'] = tweet[2] 
+        context['created'] = tweet[3] 
+        context['owner'] = tweet[4] 
+        context['likes'] = tweet[5]
+
+        return flask.jsonify(**context), 200 
     elif flask.request.method == 'POST':
         # Cannot specify both body and id
         if 'body' in request_data and 'id' in request_data:
-            return {}, 403
+            flask.abort(403)
        
         if len(request_data) > 1:
-            return {}, 403
-
-        db = fwitter.db.get_db()
-        cur = db.cursor()
+            flask.abort(403)
 
         # Normal new tweet
         if 'body' in request_data:
@@ -44,12 +67,12 @@ def tweet():
             
             return {}, 201
         elif 'id' in request_data:
-            return {}, 404
+            flask.abort(404)
         else:
-            return {}, 403
+            flask.abort(403)
     elif flask.request.method == 'PATCH':
-        return {}, 404
+        flask.abort(404)
     elif flask.request.method == 'DELETE':
-        return {}, 404
+        flask.abort(404)
     else:
-        return {}, 403
+        flask.abort(403)
