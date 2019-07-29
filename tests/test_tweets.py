@@ -104,7 +104,7 @@ class TestTweets():
 
             data = cur.fetchall()
 
-            assert data[0]['original_owner'] == 'osagie_01'
+            assert data[0]['originalOwner'] == 'osagie_01'
             assert data[0]['tweetid'] != 2
 
         cookie.logout()

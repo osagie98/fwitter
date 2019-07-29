@@ -67,7 +67,33 @@ def tweet():
             
             return {}, 201
         elif 'id' in request_data:
-            flask.abort(404)
+            # Retweet
+
+            tweetid = request_data['id']
+
+            cur.execute('SELECT * FROM tweets WHERE tweetid="{}"'.format(tweetid))
+            tweet = cur.fetchone()
+        
+            # Tweet not found
+            if tweet == None:
+                flask.abort(404)
+            
+            context['originalOwner'] = tweet[0] 
+            context['body'] = tweet[1] 
+            context['created'] = tweet[3] 
+            context['owner'] = tweet[4] 
+            context['likes'] = tweet[5]
+
+            # Determine new tweetid
+            cur.execute('SELECT count(*) FROM tweets')
+            context['tweetid'] = int(cur.fetchone()[0]) + 1
+
+            cur.execute('''INSERT INTO tweets(body, tweetid, owner, originalOwner) VALUES
+                        ('{}', '{}', '{}', '{}')'''.format(context['body'], context['tweetid'],
+                                                        flask.session['username'],
+                                                        context['originalOwner']))
+
+            return {}, 201
         else:
             flask.abort(403)
     elif flask.request.method == 'PATCH':
