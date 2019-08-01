@@ -209,3 +209,5 @@ class TestTweets():
             data1 = cur.fetchall()
 
             assert len(data1) == 0
+
+    def test_remove_tweet_like(self, app, client, cookie):
