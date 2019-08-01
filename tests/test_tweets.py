@@ -114,23 +114,23 @@ class TestTweets():
         test_username = 'osagie01'
         test_password = 'thisIsATestPassword'
 
-        # Check that a logged out user cannot like a tweet
-        response = client.patch('/api/v1/like_tweet', data={'id': 1 })
-        assert response.status_code == 403
+        with app.app_context():
+            cur = get_db().cursor()
+            # Check that a logged out user cannot like a tweet
+            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            assert response.status_code == 403
 
-        cookie.login(test_username, test_password)
+            cur.execute("SELECT * FROM tweets WHERE tweetid=1")
+            data1 = cur.fetchall()
 
-        cur = get_db().cursor()
-        cur.execute("SELECT * FROM TWEETS WHERE id=1")
-        data1 = cur.fetchall()
+            like_check = data1[0]['likes']
 
-        like_check = data1[0]['id']
+            assert like_check == 0
 
-        assert like_check == 0
-
-        with client:
+            cookie.login(test_username, test_password)
+            cur = get_db().cursor()
             # Check that post fails if tweet isn't found
-            response = client.patch('/api/v1/tweet', data={'id': 100000000 })
+            response = client.patch('/api/v1/tweet', data={'tweetid': 100000000 })
             assert response.status_code == 404
 
             # Check that post fails with no id field
@@ -140,27 +140,29 @@ class TestTweets():
             response = client.patch('/api/v1/tweet', data={ })
             assert response.status_code == 403
 
-            response = client.patc('/api/v1/tweet')
+            response = client.patch('/api/v1/tweet')
             assert response.status_code == 403
 
             # Check that post fails with multiple fields
-            response = client.patch('/api/v1/tweet', data={'id': 1, 'body': 'This should fail' })
-            assert response.status_code == 404
+            response = client.patch('/api/v1/tweet', data={'tweetid': 1, 'body': 'This should fail' })
+            assert response.status_code == 403
 
             # Test normal like
-            response = client.patch('/api/v1/tweet', data={'id': 1 })
+            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
             assert response.status_code == 202
 
-            cur.execute("SELECT * FROM TWEETS WHERE id=1")
+            cur.execute("SELECT * FROM tweets WHERE tweetid=1")
             data2 = cur.fetchall()
 
             assert data2[0]['likes'] == 1
 
-            cur.execute("SELECT * FROM likes WHERE tweetid=1 and owner=")
+            cur.execute("SELECT * FROM likes WHERE tweetid='{}' and owner='{}'".format(1, test_username))
             data2 = cur.fetchall()
 
+            assert len(data2) > 0
+
             # Check that the same user cannot like the same tweet more than once
-            response = client.patch('/api/v1/tweet', data={'id': 1 })
+            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
             assert response.status_code == 403
 
         cookie.logout()

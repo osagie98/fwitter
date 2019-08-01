@@ -97,7 +97,44 @@ def tweet():
         else:
             flask.abort(403)
     elif flask.request.method == 'PATCH':
-        flask.abort(404)
+        if 'tweetid' not in request_data:
+            flask.abort(403)
+       
+        if len(request_data) > 1:
+            flask.abort(403)
+
+        # Check if like had already been made
+        cur.execute("SELECT * FROM likes WHERE tweetid='{}' and owner='{}'".format(request_data['tweetid'], flask.session['username']))
+        data_check = cur.fetchall()
+
+        if len(data_check) > 0:
+            flask.abort(403)
+            
+        cur.execute('SELECT * FROM tweets WHERE tweetid="{}"'.format(request_data['tweetid']))
+        tweet = cur.fetchone()
+        # Tweet not found
+        if tweet == None:
+            flask.abort(404)
+
+        context['tweetid'] = tweet[0]
+        context['originalOwner'] = tweet[0] 
+        context['body'] = tweet[1] 
+        context['created'] = tweet[3] 
+        context['owner'] = tweet[4] 
+        context['likes'] = str(int(tweet[5]) + 1)
+
+        cur.execute('DELETE FROM tweets WHERE tweetid="{}"'.format(request_data['tweetid']))
+
+        cur.execute('''INSERT INTO tweets(body, tweetid, owner, originalOwner, likes) VALUES
+                        ('{}', '{}', '{}', '{}', '{}')'''.format(context['body'],
+                                                        request_data['tweetid'],
+                                                        flask.session['username'],
+                                                        context['originalOwner'],
+                                                        context['likes']))
+        
+        cur.execute('''INSERT INTO likes(tweetid, owner) VALUES ('{}', '{}')'''.format(request_data['tweetid'], flask.session['username']))
+
+        return {}, 202
     elif flask.request.method == 'DELETE':
         flask.abort(404)
     else:
