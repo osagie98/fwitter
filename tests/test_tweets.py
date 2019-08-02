@@ -174,14 +174,14 @@ class TestTweets():
 
         # Test that a logged out user cannot delete a tweet
         with client:
-            response = client.delete('/api/v1/tweet', data={'id': 1})
+            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
             assert response.status_code == 403
 
         # Test that a logged in user cannot delete a tweet that isn't theirs
         cookie.login('osagie_01', test_password)
         
         with client:
-            response = client.delete('/api/v1/tweet', data={'id': 1})
+            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
             assert response.status_code == 403
         
         cookie.logout()
@@ -190,24 +190,25 @@ class TestTweets():
 
         with client:
             # Test that a tweet cannot be deleted with an invalid request
-            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
+            response = client.delete('/api/v1/tweet', data={'id': 1})
             assert response.status_code == 403
 
             response = client.delete('/api/v1/tweet')
             assert response.status_code == 403
 
             # Test that a non existent tweet can't be deleted
-            response = client.delete('/api/v1/tweet', data={'id': 100000})
+            response = client.delete('/api/v1/tweet', data={'tweetid': 100000})
             assert response.status_code == 404
 
             # Normal test
-            response = client.delete('/api/v1/tweet', data={'id': 1})
+            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
             assert response.status_code == 204
 
             cur = get_db().cursor()
-            cur.execute("SELECT * FROM TWEETS WHERE id=1")
+            cur.execute("SELECT * FROM tweets WHERE tweetid=1")
             data1 = cur.fetchall()
 
             assert len(data1) == 0
 
     def test_remove_tweet_like(self, app, client, cookie):
+        assert False
