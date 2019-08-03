@@ -3,6 +3,7 @@ import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import SplashPage from './splash';
 import Login from './login';
+import Logout from './logout';
 import CreateAccount from './createAccount';
 import Profile from './profile';
 
@@ -13,6 +14,7 @@ const App = () => (
     <Route path="/login" component={Login} />
     <Route path="/create" component={CreateAccount} />
     <Route path="/users/:user" component={Profile} />
+    <Route path="/logout" component={Logout} />
   </div>
 );
 

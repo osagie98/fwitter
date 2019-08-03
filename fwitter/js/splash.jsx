@@ -4,12 +4,12 @@ import { Redirect, Link } from 'react-router-dom';
 class SplashPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { redirectToProfile: true, username: '' };
+    this.state = { redirectToProfile: false, username: '' };
   }
 
   componentDidMount() {
     // eslint-disable-next-line no-undef
-    fetch('/api/v1/checkLogin', { credentials: 'omit' })
+    fetch('/api/v1/check_login', { credentials: 'omit' })
       .then((response) => {
         if (!response.ok) throw response.status;
         return response.json();
@@ -17,12 +17,11 @@ class SplashPage extends React.Component {
       .then((data) => {
         this.setState({
           username: data.username,
+          redirectToProfile: true,
         });
       })
       .catch((error) => {
-        if (error === 401) {
-          this.setState({ redirectToProfile: false });
-        } else {
+        if (error !== 401) {
           console.log(error);
         }
       });
