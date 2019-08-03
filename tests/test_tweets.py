@@ -252,7 +252,7 @@ class TestTweets():
             assert response.status_code == 204
 
             cur = get_db().cursor()
-            cur.execute("SELECT * FROM likes WHERE tweetid='{}' and owner='{}'".format(1, test_username))
+            cur.execute("SELECT * FROM likes WHERE tweetid='{}' AND owner='{}'".format(1, test_username))
             data1 = cur.fetchall()
 
             assert len(data1) == 0

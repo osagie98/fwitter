@@ -8,4 +8,8 @@ body {
     background: #49d2f5;
     color: white;
     font-size: 30px;
-  }
+}
+#logout {
+    float: right;
+    color: white;
+}
