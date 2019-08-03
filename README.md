@@ -14,3 +14,5 @@ Fwitter in its current form is far from usable, but feel free to take a look at 
 4. Initialize the database by running `./bin/init demo`
 5. Run the server with `./bin/run` and naviagate to localhost:5000 for the app!
 Once the app is more complete, this setup process will become much simpler
+## Tests
+Fwitter is built with two unit testing frameworks: Pytest for the API and Jest/Enzyme for the front end. From the root directory, pytest may be run with the command `pytest -v`, and Jest can be run with `npm test`
