@@ -13,7 +13,7 @@ class Login extends React.Component {
 
   componentDidMount() {
     // TODO make api call to check if user is logged in
-    fetch('/api/v1/checkLogin', { credentials: 'omit' })
+    fetch('/api/v1/check_login', { credentials: 'omit' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         console.log(response);
