@@ -218,6 +218,43 @@ class TestTweets():
             data2 = cur.fetchall()
 
             assert len(data2) == 0
+        
+        cookie.logout()
 
     def test_remove_tweet_like(self, app, client, cookie):
-        assert False
+        """Test that a user can remove a like from a tweet"""
+        test_username = 'osagie01'
+        test_password = 'thisIsATestPassword'
+
+        cookie.login(test_username, test_password)
+
+        with app.app_context():
+           client.patch('/api/v1/tweet', data={'tweetid': 1 })
+        
+        cookie.logout() 
+        # Assert that a logged out user cannot remove a like
+        response = client.delete('/api/v1/tweet', data={'like_tweetid': 1})
+        assert response.status_code == 403
+
+        cookie.login(test_username, test_password)
+        
+        with client:
+            # Test that a like cannot be deleted with invalid data
+            response = client.delete('/api/v1/tweet', data={'likeid': 1})
+            assert response.status_code == 403
+
+            # Test that a like cannot be deleted when the tweet is not found
+            response = client.delete('/api/v1/tweet', data={'like_tweetid': 100000})
+            assert response.status_code == 404
+
+            # Normal test
+            response = client.delete('/api/v1/tweet', data={'like_tweetid': 1})
+            assert response.status_code == 204
+
+            cur = get_db().cursor()
+            cur.execute("SELECT * FROM likes WHERE tweetid='{}' and owner='{}'".format(1, test_username))
+            data1 = cur.fetchall()
+
+            assert len(data1) == 0
+        
+        cookie.logout()

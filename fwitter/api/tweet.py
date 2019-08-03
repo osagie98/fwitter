@@ -136,7 +136,7 @@ def tweet():
 
         return {}, 202
     elif flask.request.method == 'DELETE':
-        if 'tweetid' in request_data and 'likeid' in request_data:
+        if 'tweetid' in request_data and 'like_tweetid' in request_data:
             flask.abort(403)
        
         if len(request_data) > 1:
@@ -155,8 +155,18 @@ def tweet():
             cur.execute('DELETE FROM tweets WHERE tweetid="{}"'.format(request_data['tweetid']))
 
             return {}, 204
-        if 'likeid' in request_data:
-            flask.abort(403)
+        if 'like_tweetid' in request_data:
+
+            cur.execute("SELECT * FROM likes WHERE tweetid='{}' AND owner='{}'".format(request_data['like_tweetid'], flask.session['username']))
+            like = cur.fetchone()
+            # Lik not found
+            if like == None:
+                flask.abort(404)
+
+            cur.execute("DELETE FROM likes WHERE tweetid='{}' AND owner='{}'".format(request_data['like_tweetid'], flask.session['username']))
+
+            return {}, 204
+
         flask.abort(403)
     else:
         flask.abort(403)
