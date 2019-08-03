@@ -201,6 +201,9 @@ class TestTweets():
             assert response.status_code == 404
 
             # Normal test
+            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            assert response.status_code == 202
+
             response = client.delete('/api/v1/tweet', data={'tweetid': 1})
             assert response.status_code == 204
 
@@ -209,6 +212,12 @@ class TestTweets():
             data1 = cur.fetchall()
 
             assert len(data1) == 0
+            
+            # Assert that a like on the deleted tweet is removed from the database
+            cur.execute("SELECT * FROM likes WHERE tweetid='{}' and owner='{}'".format(1, test_username))
+            data2 = cur.fetchall()
+
+            assert len(data2) == 0
 
     def test_remove_tweet_like(self, app, client, cookie):
         assert False
