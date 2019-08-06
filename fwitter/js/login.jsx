@@ -1,25 +1,39 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import fetch from 'isomorphic-fetch';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '', redirect: false };
+    this.state = { username: '', password: '', redirectToProfile: false };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
   }
 
   componentDidMount() {
-    // TODO make api call to check if user is logged in
-    fetch('/api/v1/check_login', { credentials: 'omit' })
+    // eslint-disable-next-line no-undef
+    fetch('/api/v1/check_login', { credentials: 'same-origin' })
       .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
+        if (!response.ok) throw Error(response.status);
         console.log(response);
         return response.json();
       })
-      .catch(error => console.log(error));
+      .then((data) => {
+        this.setState({
+          username: data.username,
+          redirectToProfile: true,
+        });
+      })
+      .catch((error) => {
+        if (error !== 401) {
+          console.log(error);
+        } else {
+          this.setState({
+            username: '',
+            redirectToProfile: false,
+          });
+        }
+      });
   }
 
   onChangePassword(event) {
@@ -37,6 +51,7 @@ class Login extends React.Component {
   onSubmit() {
     const { username } = this.state;
     const { password } = this.state;
+    // eslint-disable-next-line no-undef
     fetch('/api/v1/login', {
       method: 'POST',
       credentials: 'same-origin',
@@ -44,40 +59,52 @@ class Login extends React.Component {
       body: JSON.stringify({ username, password }),
     })
       .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
+        if (!response.ok) throw Error(response.status);
         return response.json();
       })
-      .then(() => {
+      .then((data) => {
         this.setState({
-          redirect: true,
+          username: data.username,
+          redirectToProfile: true,
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => {
+        if (error !== 401) {
+          console.log(error);
+        } else {
+          this.setState({
+            username: '',
+            redirectToProfile: false,
+          });
+        }
+      });
   }
 
   render() {
-    const { redirect } = this.state;
+    const { redirectToProfile } = this.state;
+    const { username } = this.state;
+    const profileUrl = `/users/${username}`;
     return (
       <div>
-        { !redirect
+        { !redirectToProfile
             && (
-            <form onSubmit={this.onSubmit}>
+            <form id="login" onSubmit={this.onSubmit}>
               <p>This is the login page</p>
               <br />
                 Username:
               {' '}
-              <input type="text" onChange={this.onChangeUsername} />
+              <input id="username" type="text" onChange={this.onChangeUsername} />
               <br />
                 Password:
               {' '}
-              <input type="text" onChange={this.onChangePassword} />
+              <input id="password" type="text" onChange={this.onChangePassword} />
               <br />
-              <input type="submit" />
+              <input id="submit" type="submit" value="submit" />
             </form>
             )
             }
-        { redirect
-                && <Redirect to="/" />
+        { redirectToProfile
+                && <Redirect to={profileUrl} />
             }
       </div>
     );
