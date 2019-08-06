@@ -60,6 +60,9 @@ def create():
 @api_bp.route('/login', methods=['POST'])
 def login():
     """Log a user in to their account"""
+
+    if 'username' in flask.session:
+        flask.abort(403)
     
     request_data = flask.request.form
 
@@ -88,7 +91,7 @@ def login():
         flask.session['username'] = username
         flask.session['email'] = data[0]['email']
         flask.session['fullname'] = data[0]['fullname']
-        return {}, 200
+        return {'username': flask.session['username']}, 200
 
 @api_bp.route('/logout', methods=['GET'])
 def logout():
@@ -110,4 +113,4 @@ def check_login():
     if 'username' not in flask.session:
         flask.abort(401)
 
-    return {}, 200
+    return {'username': flask.session['username']}, 200

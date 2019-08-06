@@ -4,6 +4,7 @@ import fwitter
 from fwitter.db import get_db
 import pytest
 from flask import session
+import pdb
 
 class TestSession():
    """Testing logging in and out."""
@@ -13,8 +14,10 @@ class TestSession():
       test_username = 'osagie_01'
       test_password = 'thisIsATestPassword'
 
-      # Assert a logged in user cannot log in again
-      cookie.login(test_username, test_password)
+      # Assert a login response has a username
+      response = cookie.login(test_username, test_password)
+
+      assert response.get_json()['username'] == 'osagie_01'
        
       with client:
          client.get('/')
@@ -22,7 +25,9 @@ class TestSession():
          assert session['email'] == 'osagie@umich.edu'
          assert session['fullname'] == 'Augustine Osagie'
 
-      # TODO add error if logged in user logs in again
+      # Assert logging in again is forbidden
+      response = cookie.login(test_username, test_password)
+      assert response.status_code == 403
         
       response = cookie.logout()
 
@@ -66,6 +71,8 @@ class TestSession():
          response = client.get('/api/v1/check_login')
 
          assert response.status_code == 200
+    
+         assert response.get_json()['username'] == 'osagie_01'
 
       cookie.logout()
 
