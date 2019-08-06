@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-undef */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 // eslint-disable-next-line no-unused-vars
 import fetch from 'isomorphic-fetch';
 import SplashPage from './splash';
@@ -14,7 +14,7 @@ describe('<Login />', () => {
   });
 });
 
-describe('Splash page when logged in', () => {
+describe('Login page when logged in', () => {
   let mockResponse;
   let wrapper;
 
@@ -26,11 +26,11 @@ describe('Splash page when logged in', () => {
       status: 200,
       ok: true,
     }));
-    wrapper = shallow(<SplashPage />);
+    wrapper = shallow(<Login />);
   });
 
   it('should fetch from the api upon mounting', () => {
-    shallow(<SplashPage />);
+    shallow(<Login />);
 
     expect(window.fetch).toHaveBeenCalled();
   });
@@ -61,7 +61,7 @@ describe('Splash page when logged out', () => {
       json: () => Promise.resolve(mockResponse),
       status: 401,
     }));
-    wrapper = shallow(<SplashPage />);
+    wrapper = mount(<SplashPage />);
   });
 
   it('should fetch from the api upon mounting', () => {
@@ -72,13 +72,16 @@ describe('Splash page when logged out', () => {
     expect(wrapper.state('redirectToProfile')).toEqual(false);
   });
 
-  it('renders the create-account p', () => {
-    expect(wrapper.find('.create-account-or-login')).toHaveLength(1);
+  it('renders the login form', () => {
+    expect(wrapper.find('form#login')).toHaveLength(1);
   });
-  it('renders the login Link', () => {
-    expect(wrapper.find('Link#login').props().to).toEqual('/login');
+  it('renders the username input', () => {
+    expect(wrapper.find('input#username')).toHaveLength(1);
   });
-  it('renders the create Link', () => {
-    expect(wrapper.find('Link#create').props().to).toEqual('/create');
+  it('renders the password input', () => {
+    expect(wrapper.find('input#password')).toHaveLength(1);
+  });
+  it('renders the submit input', () => {
+    expect(wrapper.find('input#submit')).toHaveLength(1);
   });
 });
