@@ -49,7 +49,7 @@ describe('Login page when logged in', () => {
   });
 });
 
-describe('Splash page when logged out', () => {
+describe('Login page when logged out', () => {
   let mockResponse;
   let wrapper;
 
@@ -87,20 +87,23 @@ describe('Splash page when logged out', () => {
 
 describe('Logging in on Login', () => {
   let mockResponse = { };
+  let wrapper;
 
-  window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-    json: () => Promise.resolve(mockResponse),
-    status: 401,
-  }));
 
-  const wrapper = mount(<Login />);
+  beforeEach(() => {
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+      json: () => Promise.resolve(mockResponse),
+      status: 401,
+    }));
+    wrapper = shallow(<Login />);
 
-  mockResponse = { username: 'osagie01' };
-  window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-    json: () => Promise.resolve(mockResponse),
-    status: 200,
-    ok: true,
-  }));
+    mockResponse = { username: 'osagie01' };
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+      json: () => Promise.resolve(mockResponse),
+      status: 200,
+      ok: true,
+    }));
+  });
 
   it('should change redirectToProfile to true after logging in', () => {
     expect(wrapper.state('redirectToProfile')).toEqual(false);
@@ -110,11 +113,14 @@ describe('Logging in on Login', () => {
     expect(wrapper.state('password')).toEqual('thisIsATestPassword');
     wrapper.find('form#login').simulate('submit');
     expect(window.fetch).toHaveBeenCalled();
+    expect(wrapper.state('username')).toEqual('osagie01');
     expect(wrapper.state('redirectToProfile')).toEqual(true);
     expect(wrapper.find('Redirect').props().to).toEqual(`/users/${wrapper.state('username')}`);
   });
+});
 
-  mockResponse = { };
+describe('Logging in on Login with bad credentials', () => {
+  const mockResponse = { };
 
   window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
     json: () => Promise.resolve(mockResponse),

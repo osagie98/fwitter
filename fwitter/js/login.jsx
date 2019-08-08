@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '', redirectToProfile: false };
+    this.state = { username: '', password: '', redirectToProfile: null };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -14,8 +14,7 @@ class Login extends React.Component {
     // eslint-disable-next-line no-undef
     fetch('/api/v1/check_login', { credentials: 'same-origin' })
       .then((response) => {
-        if (!response.ok) throw Error(response.status);
-        console.log(response);
+        if (!response.ok) throw response.status;
         return response.json();
       })
       .then((data) => {
@@ -59,7 +58,7 @@ class Login extends React.Component {
       body: JSON.stringify({ username, password }),
     })
       .then((response) => {
-        if (!response.ok) throw Error(response.status);
+        if (!response.ok) throw response.status;
         return response.json();
       })
       .then((data) => {
