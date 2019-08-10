@@ -4,6 +4,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 // eslint-disable-next-line no-unused-vars
 import fetch from 'isomorphic-fetch';
+import sinon from 'sinon';
 import Login from './login';
 
 
@@ -60,7 +61,7 @@ describe('Login page when logged out', () => {
       json: () => Promise.resolve(mockResponse),
       status: 401,
     }));
-    wrapper = mount(<Login />);
+    wrapper = shallow(<Login />);
   });
 
   it('should fetch from the api upon mounting', () => {
@@ -90,7 +91,7 @@ describe('Logging in on Login', () => {
   let wrapper;
 
 
-  beforeEach(() => {
+  beforeAll(() => {
     window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       json: () => Promise.resolve(mockResponse),
       status: 401,
@@ -105,16 +106,29 @@ describe('Logging in on Login', () => {
     }));
   });
 
-  it('should change redirectToProfile to true after logging in', () => {
+  it('starts with redirectToProfile being false', () => {
     expect(wrapper.state('redirectToProfile')).toEqual(false);
-    wrapper.find('input#username').simulate('change', { target: { value: 'osagie01' } });
-    expect(wrapper.state('username')).toEqual('osagie01');
+  });
+  it('changes username on input', () => {
+    wrapper.find('input#username').simulate('change', { target: { value: 'osaie01' } });
+    expect(wrapper.state('username')).toEqual('osaie01');
+  });
+  it('changes password on input', () => {
     wrapper.find('input#password').simulate('change', { target: { value: 'thisIsATestPassword' } });
     expect(wrapper.state('password')).toEqual('thisIsATestPassword');
+  });
+  it('calls fetch on submit', () => {
     wrapper.find('form#login').simulate('submit');
     expect(window.fetch).toHaveBeenCalled();
     expect(wrapper.state('username')).toEqual('osagie01');
+  });
+  it('sets username to body username', () => {
+    expect(wrapper.state('username')).toEqual('osagie01');
+  });
+  it('sets redirectToProfile to true', () => {
     expect(wrapper.state('redirectToProfile')).toEqual(true);
+  });
+  it('renders the redirect', () => {
     expect(wrapper.find('Redirect').props().to).toEqual(`/users/${wrapper.state('username')}`);
   });
 });
@@ -127,7 +141,7 @@ describe('Logging in on Login with bad credentials', () => {
     status: 401,
   }));
 
-  const wrapper2 = mount(<Login />);
+  const wrapper2 = shallow(<Login />);
 
   window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
     json: () => Promise.resolve(mockResponse),

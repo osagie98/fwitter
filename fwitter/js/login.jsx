@@ -12,7 +12,7 @@ class Login extends React.Component {
 
   componentDidMount() {
     // eslint-disable-next-line no-undef
-    fetch('/api/v1/check_login', { credentials: 'same-origin' })
+    fetch('/api/v1/check_login', { credentials: 'omit' })
       .then((response) => {
         if (!response.ok) throw response.status;
         return response.json();
@@ -53,7 +53,7 @@ class Login extends React.Component {
     // eslint-disable-next-line no-undef
     fetch('/api/v1/login', {
       method: 'POST',
-      credentials: 'same-origin',
+      credentials: 'omit',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     })
