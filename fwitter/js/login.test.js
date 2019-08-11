@@ -4,7 +4,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 // eslint-disable-next-line no-unused-vars
 import fetch from 'isomorphic-fetch';
-import sinon from 'sinon';
 import Login from './login';
 
 
