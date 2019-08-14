@@ -103,6 +103,12 @@ describe('Logging in on Login', () => {
       status: 200,
       ok: true,
     }));
+
+    window.onSubmit = jest.fn().mockImplementation(() => undefined);
+  });
+
+  beforeEach(() => {
+    wrapper.update();
   });
 
   it('starts with redirectToProfile being false', () => {
@@ -119,9 +125,9 @@ describe('Logging in on Login', () => {
   it('calls fetch on submit', () => {
     wrapper.find('form#login').simulate('submit');
     expect(window.fetch).toHaveBeenCalled();
-    expect(wrapper.state('username')).toEqual('osagie01');
   });
   it('sets username to body username', () => {
+    wrapper.update();
     expect(wrapper.state('username')).toEqual('osagie01');
   });
   it('sets redirectToProfile to true', () => {
