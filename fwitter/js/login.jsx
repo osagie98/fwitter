@@ -89,8 +89,6 @@ class Login extends React.Component {
         { !redirectToProfile
             && (
             <form id="login" onSubmit={this.onSubmit}>
-              <p>This is the login page</p>
-              <br />
                 Username:
               {' '}
               <input id="username" value={username} type="text" onChange={this.onChangeUsername} />

@@ -1,6 +1,6 @@
 import React from 'react';
-import App from './app';
 import { HashRouter } from 'react-router-dom';
+import App from './app';
 import Header from './header';
 
 const AppWrapper = () => (

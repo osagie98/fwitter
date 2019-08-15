@@ -1,14 +1,15 @@
 import React from 'react';
 // import ReactDOM from 'react-dom';
-import { HashRouter, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import SplashPage from './splash';
 import Login from './login';
 import Logout from './logout';
 import CreateAccount from './createAccount';
 import Profile from './profile';
+import '../static/css/app.css';
 
 const App = () => (
-  <div id="maina-application">
+  <div id="main-application">
     { /* exact set to true to make sure only SplashPage renders at "/" */}
     <Route exact path="/" component={SplashPage} />
     <Route path="/login" component={Login} />
