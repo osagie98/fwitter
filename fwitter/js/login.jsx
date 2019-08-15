@@ -82,6 +82,7 @@ class Login extends React.Component {
   render() {
     const { redirectToProfile } = this.state;
     const { username } = this.state;
+    const { password } = this.state;
     const profileUrl = `/users/${username}`;
     return (
       <div>
@@ -92,11 +93,11 @@ class Login extends React.Component {
               <br />
                 Username:
               {' '}
-              <input id="username" type="text" onChange={this.onChangeUsername} />
+              <input id="username" value={username} type="text" onChange={this.onChangeUsername} />
               <br />
                 Password:
               {' '}
-              <input id="password" type="text" onChange={this.onChangePassword} />
+              <input id="password" value={password} type="text" onChange={this.onChangePassword} />
               <br />
               <input id="submit" type="submit" value="submit" />
             </form>

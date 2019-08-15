@@ -73,8 +73,9 @@ def login():
     cur = db.cursor()
 
     # Get data based on username and compare
-
+    
     try:
+        print('username ' + username)
         cur.execute("SELECT * FROM users WHERE username='{}'".format(username))
     except:
         # Username not found
