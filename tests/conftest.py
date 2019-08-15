@@ -45,7 +45,7 @@ class Cookie(object):
     def login(self, username, password):
         return self._client.post(
             '/api/v1/login',
-            data={'username': username, 'password': password}
+            json={'username': username, 'password': password}
         )
 
     def logout(self):

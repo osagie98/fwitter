@@ -18,7 +18,11 @@ def tweet():
         if flask.request.method != 'GET':
             flask.abort(403)
 
-    request_data = flask.request.form
+    request_data = flask.request.get_json()
+
+    if not request_data and flask.request.method != 'GET':
+        flask.abort(403)
+
     db = fwitter.db.get_db()
     cur = db.cursor()
     context = {}

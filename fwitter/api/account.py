@@ -16,7 +16,7 @@ def create():
     """Add a new user to the database"""
 
     if(flask.request.method == 'POST'):
-        request_data = flask.request.form
+        request_data = flask.request.get_json()
                 
         fullname = request_data['fullname']
         username = request_data['username']
@@ -63,8 +63,8 @@ def login():
 
     if 'username' in flask.session:
         flask.abort(403)
-    
-    request_data = flask.request.form
+
+    request_data = flask.request.get_json()
 
     username = request_data['username']
     password = hash_password(request_data['password'])

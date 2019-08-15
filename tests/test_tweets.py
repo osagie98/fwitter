@@ -16,7 +16,7 @@ class TestTweets():
 
         # Test that posting fails when a user is not logged in
         with client:
-            response = client.post('/api/v1/tweet', data={'body': 'This should fail'})
+            response = client.post('/api/v1/tweet', json={'body': 'This should fail'})
             assert response.status_code == 403
 
         cookie.login(test_username, test_password)
@@ -28,8 +28,8 @@ class TestTweets():
             response = client.post('/api/v1/tweet')
             assert response.status_code == 403
 
-            response = client.post('/api/v1/tweet', data={'body': body})
-            client.post('/api/v1/tweet', data={'body': 'The first tweet!'})
+            response = client.post('/api/v1/tweet', json={'body': body})
+            client.post('/api/v1/tweet', json={'body': 'The first tweet!'})
             assert response.status_code == 201
 
             cursor = get_db()
@@ -83,7 +83,7 @@ class TestTweets():
         cookie.login(test_username, test_password)
 
         with client:
-           client.post('/api/v1/tweet', data={'body': 'I hope somone retweets this!'})
+           client.post('/api/v1/tweet', json={'body': 'I hope somone retweets this!'})
 
         cookie.logout()
 
@@ -91,13 +91,13 @@ class TestTweets():
 
         with client:
             # Test that tweet data is either body or id, but not both
-            response = client.post('/api/v1/tweet', data={'id' : 1, 'body': 'This should fail' })
+            response = client.post('/api/v1/tweet', json={'id' : 1, 'body': 'This should fail' })
             assert response.status_code == 403
             
-            response = client.post('/api/v1/tweet', data={'tweet': 'This should fail' })
+            response = client.post('/api/v1/tweet', json={'tweet': 'This should fail' })
             assert response.status_code == 403
 
-            client.post('/api/v1/tweet', data={'id' : 2 })
+            client.post('/api/v1/tweet', json={'id' : 2 })
 
             cur = get_db().cursor()
             cur.execute("SELECT * FROM TWEETS WHERE owner='{}' AND body='{}'".format('osagie01', 'I hope somone retweets this!'))
@@ -117,7 +117,7 @@ class TestTweets():
         with app.app_context():
             cur = get_db().cursor()
             # Check that a logged out user cannot like a tweet
-            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 1 })
             assert response.status_code == 403
 
             cur.execute("SELECT * FROM tweets WHERE tweetid=1")
@@ -130,25 +130,25 @@ class TestTweets():
             cookie.login(test_username, test_password)
             cur = get_db().cursor()
             # Check that post fails if tweet isn't found
-            response = client.patch('/api/v1/tweet', data={'tweetid': 100000000 })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 100000000 })
             assert response.status_code == 404
 
             # Check that post fails with no id field
-            response = client.patch('/api/v1/tweet', data={'test': 100000000 })
+            response = client.patch('/api/v1/tweet', json={'test': 100000000 })
             assert response.status_code == 403
 
-            response = client.patch('/api/v1/tweet', data={ })
+            response = client.patch('/api/v1/tweet', json={ })
             assert response.status_code == 403
 
             response = client.patch('/api/v1/tweet')
             assert response.status_code == 403
 
             # Check that post fails with multiple fields
-            response = client.patch('/api/v1/tweet', data={'tweetid': 1, 'body': 'This should fail' })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 1, 'body': 'This should fail' })
             assert response.status_code == 403
 
             # Test normal like
-            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 1 })
             assert response.status_code == 202
 
             cur.execute("SELECT * FROM tweets WHERE tweetid=1")
@@ -162,7 +162,7 @@ class TestTweets():
             assert len(data2) > 0
 
             # Check that the same user cannot like the same tweet more than once
-            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 1 })
             assert response.status_code == 403
 
         cookie.logout()
@@ -174,14 +174,14 @@ class TestTweets():
 
         # Test that a logged out user cannot delete a tweet
         with client:
-            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
+            response = client.delete('/api/v1/tweet', json={'tweetid': 1})
             assert response.status_code == 403
 
         # Test that a logged in user cannot delete a tweet that isn't theirs
         cookie.login('osagie_01', test_password)
         
         with client:
-            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
+            response = client.delete('/api/v1/tweet', json={'tweetid': 1})
             assert response.status_code == 403
         
         cookie.logout()
@@ -190,21 +190,21 @@ class TestTweets():
 
         with client:
             # Test that a tweet cannot be deleted with an invalid request
-            response = client.delete('/api/v1/tweet', data={'id': 1})
+            response = client.delete('/api/v1/tweet', json={'id': 1})
             assert response.status_code == 403
 
             response = client.delete('/api/v1/tweet')
             assert response.status_code == 403
 
             # Test that a non existent tweet can't be deleted
-            response = client.delete('/api/v1/tweet', data={'tweetid': 100000})
+            response = client.delete('/api/v1/tweet', json={'tweetid': 100000})
             assert response.status_code == 404
 
             # Normal test
-            response = client.patch('/api/v1/tweet', data={'tweetid': 1 })
+            response = client.patch('/api/v1/tweet', json={'tweetid': 1 })
             assert response.status_code == 202
 
-            response = client.delete('/api/v1/tweet', data={'tweetid': 1})
+            response = client.delete('/api/v1/tweet', json={'tweetid': 1})
             assert response.status_code == 204
 
             cur = get_db().cursor()
@@ -229,26 +229,26 @@ class TestTweets():
         cookie.login(test_username, test_password)
 
         with app.app_context():
-           client.patch('/api/v1/tweet', data={'tweetid': 1 })
+           client.patch('/api/v1/tweet', json={'tweetid': 1 })
         
         cookie.logout() 
         # Assert that a logged out user cannot remove a like
-        response = client.delete('/api/v1/tweet', data={'like_tweetid': 1})
+        response = client.delete('/api/v1/tweet', json={'like_tweetid': 1})
         assert response.status_code == 403
 
         cookie.login(test_username, test_password)
         
         with client:
             # Test that a like cannot be deleted with invalid data
-            response = client.delete('/api/v1/tweet', data={'likeid': 1})
+            response = client.delete('/api/v1/tweet', json={'likeid': 1})
             assert response.status_code == 403
 
             # Test that a like cannot be deleted when the tweet is not found
-            response = client.delete('/api/v1/tweet', data={'like_tweetid': 100000})
+            response = client.delete('/api/v1/tweet', json={'like_tweetid': 100000})
             assert response.status_code == 404
 
             # Normal test
-            response = client.delete('/api/v1/tweet', data={'like_tweetid': 1})
+            response = client.delete('/api/v1/tweet', json={'like_tweetid': 1})
             assert response.status_code == 204
 
             cur = get_db().cursor()

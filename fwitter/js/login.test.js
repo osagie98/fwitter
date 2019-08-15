@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-undef */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 // eslint-disable-next-line no-unused-vars
 import fetch from 'isomorphic-fetch';
 import Login from './login';
@@ -107,10 +107,6 @@ describe('Logging in on Login', () => {
     window.onSubmit = jest.fn().mockImplementation(() => undefined);
   });
 
-  beforeEach(() => {
-    wrapper.update();
-  });
-
   it('starts with redirectToProfile being false', () => {
     expect(wrapper.state('redirectToProfile')).toEqual(false);
   });
@@ -127,7 +123,6 @@ describe('Logging in on Login', () => {
     expect(window.fetch).toHaveBeenCalled();
   });
   it('sets username to body username', () => {
-    wrapper.update();
     expect(wrapper.state('username')).toEqual('osagie01');
   });
   it('sets redirectToProfile to true', () => {

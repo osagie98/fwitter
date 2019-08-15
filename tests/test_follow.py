@@ -15,6 +15,6 @@ class TestFollow():
         test_password = 'thisIsATestPassword'
 
         # Test that a non logged in user cannot follow an account
-        response = client.post('/api/v1/follow', data={ 'user': 'osagie_01'})
+        response = client.post('/api/v1/follow', json={ 'user': 'osagie_01'})
 
         assert response.status_code == 403
