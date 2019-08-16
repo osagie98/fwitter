@@ -3,11 +3,20 @@ import { HashRouter } from 'react-router-dom';
 import App from './app';
 import Header from './header';
 
-const AppWrapper = () => (
-  <HashRouter>
-    <Header />
-    <App />
-  </HashRouter>
-);
+class AppWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {loggedIn: null};
+  }
+
+  render() {
+    return (
+      <HashRouter>
+        <Header />
+        <App />
+      </HashRouter>
+    );
+  }
+}
 
 export default AppWrapper;
