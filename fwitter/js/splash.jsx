@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 
 class SplashPage extends React.Component {
@@ -28,15 +29,15 @@ class SplashPage extends React.Component {
   }
 
   render() {
-    const { redirectToProfile } = this.state;
-    const { username } = this.state;
+    const { loggedIn } = this.props;
+    const { username } = this.props;
     const profileUrl = `/users/${username}`;
     return (
       <div className="login-or-redirect">
-        { redirectToProfile
+        { loggedIn
                 && <Redirect to={profileUrl} />
                 }
-        { !redirectToProfile
+        { !loggedIn
                 && (
                 <div className="create-account-or-login">
                   <Link id="create" to="/create">Create an account</Link>
@@ -50,5 +51,10 @@ class SplashPage extends React.Component {
     );
   }
 }
+
+SplashPage.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  username: PropTypes.string.isRequired,
+};
 
 export default SplashPage;

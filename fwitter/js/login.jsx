@@ -1,38 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '', redirectToProfile: null };
+    this.state = { inputUsername: '', password: '', redirectToProfile: null };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-  }
-
-  componentDidMount() {
-    // eslint-disable-next-line no-undef
-    fetch('/api/v1/check_login', { credentials: 'omit' })
-      .then((response) => {
-        if (!response.ok) throw response.status;
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({
-          username: data.username,
-          redirectToProfile: true,
-        });
-      })
-      .catch((error) => {
-        if (error !== 401) {
-          console.log(error);
-        } else {
-          this.setState({
-            username: '',
-            redirectToProfile: false,
-          });
-        }
-      });
   }
 
   onChangePassword(event) {
@@ -43,7 +19,7 @@ class Login extends React.Component {
 
   onChangeUsername(event) {
     this.setState({
-      username: event.target.value,
+      inputUsername: event.target.value,
     });
   }
 
@@ -63,7 +39,7 @@ class Login extends React.Component {
       })
       .then((data) => {
         this.setState({
-          username: data.username,
+          inputUsername: data.username,
           redirectToProfile: true,
         });
       })
@@ -72,7 +48,7 @@ class Login extends React.Component {
           console.log(error);
         } else {
           this.setState({
-            username: '',
+            inputUsername: '',
             redirectToProfile: false,
           });
         }
@@ -81,17 +57,23 @@ class Login extends React.Component {
 
   render() {
     const { redirectToProfile } = this.state;
-    const { username } = this.state;
+    const { inputUsername } = this.state;
     const { password } = this.state;
-    const profileUrl = `/users/${username}`;
+    const profileUrl = `/users/${inputUsername}`;
+    const { username } = this.props;
+    const propsProfileUrl = `/users/${username}`;
+    const { loggedIn } = this.props;
     return (
       <div>
+        { loggedIn
+            && <Redirect to={propsProfileUrl} />
+        }
         { !redirectToProfile
             && (
             <form id="login" onSubmit={this.onSubmit}>
                 Username:
               {' '}
-              <input id="username" value={username} type="text" onChange={this.onChangeUsername} />
+              <input id="username" value={inputUsername} type="text" onChange={this.onChangeUsername} />
               <br />
                 Password:
               {' '}
@@ -109,4 +91,10 @@ class Login extends React.Component {
   }
 }
 
+Login.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  username: PropTypes.string.isRequired,
+};
+
+  
 export default Login;
