@@ -6,14 +6,41 @@ import Header from './header';
 class AppWrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loggedIn: null};
+    this.state = { loggedIn: null, username: ''};
+  }
+
+  componentDidMount() {
+    // eslint-disable-next-line no-undef
+    fetch('/api/v1/check_login', { credentials: 'omit' })
+      .then((response) => {
+        if (!response.ok) throw response.status;
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          username: data.username,
+          loggedIn: true,
+        });
+      })
+      .catch((error) => {
+        if (error !== 401) {
+          console.log(error);
+        } else {
+          this.setState({
+            username: '',
+            loggedIn: false,
+          });
+        }
+      });
   }
 
   render() {
+    const { loggedIn } = this.state;
+    const { username } = this.state;
     return (
       <HashRouter>
-        <Header />
-        <App />
+        <Header loggedIn={loggedIn} username={username} />
+        <App loggedIn={loggedIn} username={username} />
       </HashRouter>
     );
   }
