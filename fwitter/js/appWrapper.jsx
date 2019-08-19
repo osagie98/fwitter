@@ -6,7 +6,7 @@ import Header from './header';
 class AppWrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loggedIn: null, username: ''};
+    this.state = { loggedIn: false, username: '' };
   }
 
   componentDidMount() {

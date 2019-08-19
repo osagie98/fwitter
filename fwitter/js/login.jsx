@@ -96,5 +96,5 @@ Login.propTypes = {
   username: PropTypes.string.isRequired,
 };
 
-  
+
 export default Login;
