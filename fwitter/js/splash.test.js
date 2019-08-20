@@ -9,7 +9,7 @@ import SplashPage from './splash';
 
 describe('<SplashPage />', () => {
   it('can render a page without logging in', () => {
-    shallow(<SplashPage />);
+    shallow(<SplashPage loggedIn={false} username="" />);
   });
 });
 
@@ -25,12 +25,10 @@ describe('Splash page when logged in', () => {
       status: 200,
       ok: true,
     }));
-    wrapper = shallow(<SplashPage />);
+    wrapper = shallow(<SplashPage loggedIn username="osagie_01" />);
   });
 
   it('should fetch from the api upon mounting', () => {
-    shallow(<SplashPage />);
-
     expect(window.fetch).toHaveBeenCalled();
   });
 
@@ -39,7 +37,7 @@ describe('Splash page when logged in', () => {
   });
 
   it('should set username to the returned username', () => {
-    expect(wrapper.state('username')).toEqual('osagie_01');
+    expect(wrapper.props().username).toEqual('osagie_01');
   });
 
   it('should render a Redirect object to /profile', () => {
@@ -60,7 +58,7 @@ describe('Splash page when logged out', () => {
       json: () => Promise.resolve(mockResponse),
       status: 401,
     }));
-    wrapper = shallow(<SplashPage />);
+    wrapper = shallow(<SplashPage loggedIn={false} username="" />);
   });
 
   it('should fetch from the api upon mounting', () => {

@@ -26,10 +26,10 @@ describe('Login page when logged in', () => {
       ok: true,
     }));
     wrapper = shallow(<Login />);
+    wrapper.setProps({ loggedIn: false });
   });
 
   it('should fetch from the api upon mounting', () => {
-    shallow(<Login />);
 
     expect(window.fetch).toHaveBeenCalled();
   });
