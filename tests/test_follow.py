@@ -18,3 +18,12 @@ class TestFollow():
         response = client.post('/api/v1/follow', json={ 'user': 'osagie_01'})
 
         assert response.status_code == 403
+
+        cookie.login(test_username, test_password)
+
+        with app.app_context():
+            
+            # Test that a logged in user can follow another user
+            response = client.post('/api/v1/follow', json={ 'user': 'osagie_01'})
+
+            assert response.status_code == 204
