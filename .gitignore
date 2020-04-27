@@ -10,6 +10,7 @@ fwitter.egg-info*
 
 # Node stuff
 *node_modules/
+package-lock.json
 
 # Flask suggested
 venv/
